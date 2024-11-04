@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <script defer src="/javascripts/RequestManager.js"></script>
+    <script>
+      function onInputFile(event) {
+        RequestManager.handleFileSelect(event, "#imgPreview");
+      }
+    </script>
+    <style>
+      .photo {
+        width: 100px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Шапка -->
+    <header>
+      <h1><%= title %></h1>
+      <nav>
+        <a href="/">Головна</a>
+        <a href="/about">Про нас</a>
+        <a href="/autopark"><strong>До автопарку</strong></a>
+      </nav>
+    </header>
+    <main>
+      <h2>Додати новий автомобіль</h2>
+      <% if(errors?.length > 0) { %>
+      <ul>
+        <% errors.forEach(function (error) { %>
+        <li><%= error.msg %></li>
+        <% }) %>
+      </ul>
+      <% } %>
+
+      <form
+        action="<%= carData.id ? `/autopark/edit/${carData.id}` : '/autopark'  %>"
+        enctype="multipart/form-data"
+        method="POST"
+      >
+        <label
+          >Марка:
+          <input type="text" name="make" value="<%= carData.make %>" />
+        </label>
+        <label
+          >Модель:
+          <input type="text" name="model" value="<%= carData.model %>" />
+        </label>
+        <label
+          >Рік:
+          <input type="number" name="year" value="<%= carData.year %>" />
+        </label>
+        <label
+          >Номерний знак:
+          <input
+            type="text"
+            name="numberPlate"
+            value="<%= carData.numberPlate %>"
+          />
+        </label>
+        <label
+          >Фото:
+          <input
+            onchange="onInputFile(event)"
+            type="file"
+            accept="image/*"
+            name="photo"
+          />
+          <img src="/images/no_photo.png" class="photo" id="imgPreview" />
+        </label>
+        <button type="submit"><%= carData.id ? "Змінити" : "Додати" %></button>
+      </form>
+    </main>
+
+    <!-- Футер -->
+    <footer>
+      <p>&copy; 2024 Автопарк "АвтоЛюкс". Всі права захищені.</p>
+    </footer>
+  </body>
+</html>
